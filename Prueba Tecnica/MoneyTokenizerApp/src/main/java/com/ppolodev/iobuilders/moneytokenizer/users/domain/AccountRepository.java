@@ -1,12 +1,12 @@
 package com.ppolodev.iobuilders.moneytokenizer.users.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-
-	UserEntity findById(int id);
+public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	
-	UserEntity findByName(String name);
+	@Query("SELECT u FROM AccountEntity u WHERE u.name = ?1")
+	AccountEntity findByName(String name);
 }

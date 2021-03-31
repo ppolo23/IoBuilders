@@ -15,52 +15,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ppolodev.iobuilders.moneytokenizer.users.application.UserDTO;
-import com.ppolodev.iobuilders.moneytokenizer.users.application.UserService;
+import com.ppolodev.iobuilders.moneytokenizer.users.application.AccountDTO;
+import com.ppolodev.iobuilders.moneytokenizer.users.application.AccountService;
 
 @RestController
 @RequestMapping("/moneyTokenizer")
-public class UserController {
+public class AccountController {
 
-	Logger logger = LoggerFactory.getLogger(UserController.class);
+	Logger logger = LoggerFactory.getLogger(AccountController.class);
 
 	@Autowired
-	private UserService userService;
+	private AccountService accountService;
 
 	@PostMapping(value = "/users")
-	public ResponseEntity<UserDTO> createUser(@RequestParam final String userName) {
-		UserDTO user = null;
+	public ResponseEntity<AccountDTO> createAccount(@RequestParam final String name) {
+		AccountDTO account = null;
 		try {
-			user = userService.createUser(userName);
+			account = accountService.createAccount(name);
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+		return new ResponseEntity<>(account, HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = "/users/{id}")
-	public ResponseEntity<UserDTO> getUserById(@PathVariable final int id) {
-		UserDTO user = null;
+	@GetMapping(value = "/users/{name}")
+	public ResponseEntity<AccountDTO> getAccountByName(@PathVariable final String name) {
+		AccountDTO account = null;
 		try {
-			user = userService.getUserById(id);
+			account = accountService.getAccountByName(name);
 		} catch(Exception e) {
 			logger.error(e.toString());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+		return new ResponseEntity<>(account, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/users/all")
-	public ResponseEntity<List<UserDTO>> getAllUsers() {
-		List<UserDTO> users = new ArrayList<>();
+	public ResponseEntity<List<AccountDTO>> getAllAccounts() {
+		List<AccountDTO> accounts = new ArrayList<>();
 		try {
-			users = userService.getUsers();
+			accounts = accountService.getAccounts();
 		}  catch(Exception e) {
 			logger.error(e.toString());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(users, HttpStatus.OK);
+		return new ResponseEntity<>(accounts, HttpStatus.OK);
 	}
 
 }

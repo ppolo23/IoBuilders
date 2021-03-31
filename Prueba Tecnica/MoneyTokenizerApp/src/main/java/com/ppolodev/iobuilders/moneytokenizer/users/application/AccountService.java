@@ -2,13 +2,13 @@ package com.ppolodev.iobuilders.moneytokenizer.users.application;
 
 import java.util.List;
 
-public interface UserService {
+public interface AccountService {
+	
+	final String credentialsPath = "src/main/resources/credentials";
 
-	UserDTO createUser(String userName);
+	AccountDTO createAccount(String name);
 	
-	UserDTO getUserById(int id);
+	AccountDTO getAccountByName(String name);
 	
-	UserDTO getUserByName(String name);
-	
-	List<UserDTO> getUsers();
+	List<AccountDTO> getAccounts();
 }
