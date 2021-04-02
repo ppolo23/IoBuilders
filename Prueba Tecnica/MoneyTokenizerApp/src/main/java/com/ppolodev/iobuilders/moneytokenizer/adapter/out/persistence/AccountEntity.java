@@ -1,4 +1,4 @@
-package com.ppolodev.iobuilders.moneytokenizer.users.domain;
+package com.ppolodev.iobuilders.moneytokenizer.adapter.out.persistence;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,9 +12,7 @@ public class AccountEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
-	
-	private String name;
+	private Long id;
 	
 	private String address;
 	
@@ -24,27 +22,18 @@ public class AccountEntity {
 	
 	public AccountEntity() {}
 	
-	public AccountEntity(String name, String address, String privateKey) {
-		this.name = name;
+	public AccountEntity(String address, String privateKey) {
 		this.address = address;
 		this.privateKey = privateKey;
 		this.balance = 0d;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getAddress() {

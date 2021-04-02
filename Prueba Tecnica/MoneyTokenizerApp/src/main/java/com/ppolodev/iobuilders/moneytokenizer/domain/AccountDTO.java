@@ -1,10 +1,8 @@
-package com.ppolodev.iobuilders.moneytokenizer.users.application;
+package com.ppolodev.iobuilders.moneytokenizer.domain;
 
 public class AccountDTO {
 
-	private int id;
-	
-	private String name;
+	private Long id;
 	
 	private String address;
 	
@@ -13,23 +11,21 @@ public class AccountDTO {
 	private Double balance;
 	
 	public AccountDTO() {}
+	
+	public AccountDTO(String address, String privateKey) {
+		this.address = address;
+		this.privateKey = privateKey;
+		this.balance = 0d;
+	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getAddress() {
 		return address;
 	}
