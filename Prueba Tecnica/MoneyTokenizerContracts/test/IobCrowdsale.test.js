@@ -13,7 +13,7 @@ contract('IobCrowdsale', function ([ creator, investor, wallet ]) {
   const NAME = 'IobToken';
   const SYMBOL = 'IOB';
   const TOTAL_SUPPLY = new BN('10000000000000000000000');
-  const RATE = new BN(10);
+  const RATE = new BN(1);
 
   beforeEach(async function () {
     this.token = await IobToken.new(NAME, SYMBOL, TOTAL_SUPPLY, { from: creator });
