@@ -4,8 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 **/src/main/resources/credentials
-peticiones.txt
 node_modules
+peticiones.txt
+solcjs
+utils
 
 ### STS ###
 .apt_generated

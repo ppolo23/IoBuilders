@@ -57,11 +57,31 @@
 			<artifactId>dozer-spring-boot-starter</artifactId>
 			<version>6.5.0</version>
 		</dependency>
+		<!-- <dependency> <groupId>org.web3j</groupId> <artifactId>web3j-spring-boot-starter</artifactId> 
+			<version>1.6.0</version> </dependency> -->
 		<dependency>
 			<groupId>org.web3j</groupId>
-			<artifactId>web3j-spring-boot-starter</artifactId>
-			<version>1.6.0</version>
+			<artifactId>core</artifactId>
+			<version>4.8.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>5.3.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.reactivex.rxjava2</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>2.2.21</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.9.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -80,5 +100,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -8,5 +8,5 @@ module.exports = async function (deployer, network, accounts) {
   await deployer.deploy(IobCrowdsale, 1, accounts[0], token.address);
   const crowdsale = await IobCrowdsale.deployed();
 
-  token.transfer(crowdsale.address, await token.totalSupply())
+  await token.transfer(crowdsale.address, await token.totalSupply());
 };

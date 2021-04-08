@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ppolodev.iobuilders.moneytokenizer.application.port.in.BuyIobTokensUseCase;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.in.DepositUseCase;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.in.GetAllUsersUseCase;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.in.GetUserByUsernameUseCase;
@@ -25,8 +26,6 @@ import com.ppolodev.iobuilders.moneytokenizer.domain.UserDTO;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-	Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private RegisterUserUseCase registerUserUseCase;
@@ -45,6 +44,9 @@ public class UserController {
 	
 	@Autowired
 	private TransferUseCase transferUseCase;
+	
+	@Autowired
+	private BuyIobTokensUseCase buyIobTokensUseCase;
 	
 	
 	@PostMapping()
@@ -65,17 +67,34 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "{username}/deposit/{amount}")
-	public void deposit(@PathVariable String username, @PathVariable Double amount) {
-		depositUseCase.deposit(username, amount);
+	public ResponseEntity<String> deposit(@PathVariable String username, @PathVariable Double amount) {
+		if(depositUseCase.deposit(username, amount)) {
+			return new ResponseEntity<>("Deposit done successfully", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+		}
+	}
+	
+	@PostMapping(value = "{username}/buyIobTokens/{amount}")
+	public ResponseEntity<String> buyIobTokens(@PathVariable String username, @PathVariable Double amount) {
+		if(buyIobTokensUseCase.buyIobTokens(username, amount)) {
+			return new ResponseEntity<>(String.format("You bought %d IobTokens", amount), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+		}
+	}
+	
+	@PostMapping(value = "{sender}/transfer/{amount}/{receiver}")
+	public ResponseEntity<String> transfer(@PathVariable String sender, @PathVariable Double amount, @PathVariable String receiver) {
+		if(transferUseCase.transfer(sender, amount, receiver)) {
+			return new ResponseEntity<>(String.format("%d IOB transfered to %s", amount, receiver), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+		}
 	}
 	
 	@PostMapping(value = "{username}/withdraw/{amount}")
 	public void withdraw(@PathVariable String username, @PathVariable Double amount) {
 		withdrawUseCase.withdraw(username, amount);
-	}
-	
-	@PostMapping(value = "{sender}/transfer/{amount}/{receiver}")
-	public void transfer(@PathVariable String sender, @PathVariable Double amount, @PathVariable String receiver) {
-		transferUseCase.transfer(sender, amount, receiver);
 	}
 }

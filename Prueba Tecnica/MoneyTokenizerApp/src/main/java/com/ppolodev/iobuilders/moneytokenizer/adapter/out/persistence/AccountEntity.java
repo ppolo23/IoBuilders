@@ -14,18 +14,21 @@ public class AccountEntity {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	private String address;
+	private String walletName;
 	
-	private String privateKey;
+	private String password;
 	
-	private Double balance;
+	private Double ethBalance;
+	
+	private Double tokenBalance;
 	
 	public AccountEntity() {}
 	
-	public AccountEntity(String address, String privateKey) {
-		this.address = address;
-		this.privateKey = privateKey;
-		this.balance = 0d;
+	public AccountEntity(String walletName, String password) {
+		this.walletName = walletName;
+		this.password = password;
+		this.ethBalance = 0d;
+		this.tokenBalance = 0d;
 	}
 
 	public Long getId() {
@@ -35,28 +38,36 @@ public class AccountEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getAddress() {
-		return address;
+	
+	public String getWalletName() {
+		return walletName;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setWalletName(String walletName) {
+		this.walletName = walletName;
 	}
 
-	public String getPrivateKey() {
-		return privateKey;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public Double getBalance() {
-		return balance;
+	public Double getEthBalance() {
+		return ethBalance;
 	}
 
-	public void setBalance(Double balance) {
-		this.balance = balance;
+	public void setEthBalance(Double ethBalance) {
+		this.ethBalance = ethBalance;
+	}
+
+	public Double getTokenBalance() {
+		return tokenBalance;
+	}
+
+	public void setTokenBalance(Double tokenBalance) {
+		this.tokenBalance = tokenBalance;
 	}
 }
