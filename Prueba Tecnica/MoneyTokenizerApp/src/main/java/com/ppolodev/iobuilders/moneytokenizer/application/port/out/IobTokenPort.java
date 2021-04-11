@@ -2,11 +2,9 @@ package com.ppolodev.iobuilders.moneytokenizer.application.port.out;
 
 import com.ppolodev.iobuilders.moneytokenizer.domain.AccountDTO;
 
-public interface Web3jPort {
+public interface IobTokenPort {
 	
-	final String iobCrowdsaleAddress = "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24";
-	
-	final String iobTokenAddress = "";
+	final String iobTokenAddress = "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab";
 	
 	final String faucetAddress = "0x6cbed15c793ce57650b9877cf6fa156fbef513c4e6134f022a85b1ffdd59b2a1";
 	
@@ -15,10 +13,4 @@ public interface Web3jPort {
 	Double getEthBalance(AccountDTO account);
 
 	boolean deposit(AccountDTO account, Double amount);
-	
-	boolean buyIobTokens(AccountDTO account, Double amount);
-	
-	boolean withdraw(AccountDTO account, Double amount);
-	
-	boolean transfer(AccountDTO sender, Double amount, AccountDTO receiver);
 }

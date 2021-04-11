@@ -71,30 +71,34 @@ public class UserController {
 		if(depositUseCase.deposit(username, amount)) {
 			return new ResponseEntity<>("Deposit done successfully", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+			return new ResponseEntity<>("Something went wrong", HttpStatus.METHOD_FAILURE);
 		}
 	}
 	
 	@PostMapping(value = "{username}/buyIobTokens/{amount}")
 	public ResponseEntity<String> buyIobTokens(@PathVariable String username, @PathVariable Double amount) {
 		if(buyIobTokensUseCase.buyIobTokens(username, amount)) {
-			return new ResponseEntity<>(String.format("You bought %d IobTokens", amount), HttpStatus.OK);
+			return new ResponseEntity<>(String.format("You bought %f IobTokens", amount), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+			return new ResponseEntity<>("Something went wrong", HttpStatus.METHOD_FAILURE);
 		}
 	}
 	
 	@PostMapping(value = "{sender}/transfer/{amount}/{receiver}")
 	public ResponseEntity<String> transfer(@PathVariable String sender, @PathVariable Double amount, @PathVariable String receiver) {
 		if(transferUseCase.transfer(sender, amount, receiver)) {
-			return new ResponseEntity<>(String.format("%d IOB transfered to %s", amount, receiver), HttpStatus.OK);
+			return new ResponseEntity<>(String.format("%f IOB transfered to %s", amount, receiver), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("Something went wrong", HttpStatus.OK);
+			return new ResponseEntity<>("Something went wrong", HttpStatus.METHOD_FAILURE);
 		}
 	}
 	
 	@PostMapping(value = "{username}/withdraw/{amount}")
-	public void withdraw(@PathVariable String username, @PathVariable Double amount) {
-		withdrawUseCase.withdraw(username, amount);
+	public ResponseEntity<String> withdraw(@PathVariable String username, @PathVariable Double amount) {
+		if(withdrawUseCase.withdraw(username, amount)) {
+			return new ResponseEntity<>(String.format("%f tokens sold successfully", amount), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Something went wrong", HttpStatus.METHOD_FAILURE);
+		}
 	}
 }

@@ -16,9 +16,10 @@ import com.ppolodev.iobuilders.moneytokenizer.application.port.in.GetUserByUsern
 import com.ppolodev.iobuilders.moneytokenizer.application.port.in.RegisterUserUseCase;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.in.TransferUseCase;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.in.WithdrawUseCase;
+import com.ppolodev.iobuilders.moneytokenizer.application.port.out.IobTokenPort;
+import com.ppolodev.iobuilders.moneytokenizer.application.port.out.IobWalletPort;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.out.LoadUserPort;
 import com.ppolodev.iobuilders.moneytokenizer.application.port.out.PersistUserPort;
-import com.ppolodev.iobuilders.moneytokenizer.application.port.out.Web3jPort;
 import com.ppolodev.iobuilders.moneytokenizer.domain.AccountDTO;
 import com.ppolodev.iobuilders.moneytokenizer.domain.UserDTO;
 
@@ -35,7 +36,10 @@ DepositUseCase, WithdrawUseCase, TransferUseCase {
 	private LoadUserPort loadUserPort;
 	
 	@Autowired
-	private Web3jPort web3jPort;
+	private IobWalletPort iobWalletPort;
+	
+	@Autowired
+	private IobTokenPort iobTokenPort;
 
 	@Override
 	public UserDTO registerUser(String username, String password) {
@@ -56,26 +60,27 @@ DepositUseCase, WithdrawUseCase, TransferUseCase {
 		UserDTO user = loadUserPort.loadUserByUsername(username);
 		return user;
 	}
-	
+
 	@Override
-	public Boolean buyIobTokens(String username, Double amount) {
+	public Boolean deposit(String username, Double amount) {
 		UserDTO user = loadUserPort.loadUserByUsername(username);
 		if(user != null) {
-			if(web3jPort.buyIobTokens(user.getAccount(), amount)) {
-				user.getAccount().setEthBalance(web3jPort.getEthBalance(user.getAccount()));
+			if(iobTokenPort.deposit(user.getAccount(), amount)) {
+				user.getAccount().setEthBalance(iobTokenPort.getEthBalance(user.getAccount()));
 				persistUserPort.saveUser(user);
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 	@Override
-	public Boolean deposit(String username, Double amount) {
+	public Boolean buyIobTokens(String username, Double amount) {
 		UserDTO user = loadUserPort.loadUserByUsername(username);
 		if(user != null) {
-			if(web3jPort.deposit(user.getAccount(), amount)) {
-				user.getAccount().setEthBalance(web3jPort.getEthBalance(user.getAccount()));
+			if(iobWalletPort.buyTokens(user.getAccount(), amount)) {
+				user.getAccount().setEthBalance(iobTokenPort.getEthBalance(user.getAccount()));
+				user.getAccount().setTokenBalance(iobTokenPort.getTokenBalance(user.getAccount()));
 				persistUserPort.saveUser(user);
 				return true;
 			}
@@ -90,10 +95,13 @@ DepositUseCase, WithdrawUseCase, TransferUseCase {
 		if(senderDTO != null && receiverDTO != null) {
 			Double senderBalance = senderDTO.getAccount().getTokenBalance();
 			if(amount <= senderBalance) {
-				if(web3jPort.transfer(senderDTO.getAccount(), amount, receiverDTO.getAccount())) {
+				if(iobWalletPort.transfer(senderDTO.getAccount(), amount, receiverDTO.getAccount())) {
 					
-					senderDTO.getAccount().setTokenBalance(web3jPort.getTokenBalance(senderDTO.getAccount()));
-					receiverDTO.getAccount().setTokenBalance(web3jPort.getTokenBalance(receiverDTO.getAccount()));
+					senderDTO.getAccount().setTokenBalance(iobTokenPort.getTokenBalance(senderDTO.getAccount()));
+					senderDTO.getAccount().setEthBalance(iobTokenPort.getEthBalance(senderDTO.getAccount()));
+					
+					receiverDTO.getAccount().setTokenBalance(iobTokenPort.getTokenBalance(receiverDTO.getAccount()));
+					receiverDTO.getAccount().setEthBalance(iobTokenPort.getEthBalance(receiverDTO.getAccount()));
 					
 					persistUserPort.saveUser(senderDTO);
 					persistUserPort.saveUser(receiverDTO);
@@ -105,15 +113,20 @@ DepositUseCase, WithdrawUseCase, TransferUseCase {
 	}
 
 	@Override
-	public void withdraw(String username, Double amount) {
+	public boolean withdraw(String username, Double amount) {
 		UserDTO user = loadUserPort.loadUserByUsername(username);
 		if(user != null) {
 			Double actualBalance = user.getAccount().getTokenBalance();
 			if(amount <= actualBalance) {
-				user.getAccount().setTokenBalance(web3jPort.getTokenBalance(user.getAccount()));
-				persistUserPort.saveUser(user);
+				if(iobWalletPort.withdraw(user.getAccount(), amount)) {
+					user.getAccount().setTokenBalance(iobTokenPort.getTokenBalance(user.getAccount()));
+					user.getAccount().setEthBalance(iobTokenPort.getEthBalance(user.getAccount()));
+					persistUserPort.saveUser(user);
+					return true;
+				}
 			}
 		}
+		return false;
 	}
 
 	private AccountDTO createAccount(String password) {

@@ -7,9 +7,9 @@
     "test": "test"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^2.5.1",
+    "@openzeppelin/contracts": "^4.0.0",
     "chai": "^4.3.4",
-    "solc": "^0.8.3"
+    "solc": "^0.8.0"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.10"

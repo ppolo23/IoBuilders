@@ -5,9 +5,6 @@ target/
 !**/src/test/**/target/
 **/src/main/resources/credentials
 node_modules
-peticiones.txt
-solcjs
-utils
 
 ### STS ###
 .apt_generated

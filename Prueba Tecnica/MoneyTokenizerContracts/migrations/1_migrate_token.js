@@ -1,12 +1,16 @@
 const IobToken = artifacts.require("IobToken");
-const IobCrowdsale = artifacts.require("IobCrowdsale");
+const IobWallet = artifacts.require("IobWallet");
 
 module.exports = async function (deployer, network, accounts) {
+  //Token deployment
   await deployer.deploy(IobToken, 'Iob Token', 'IOB', '10000000000000000000000');
   const token = await IobToken.deployed();
   
-  await deployer.deploy(IobCrowdsale, 1, accounts[0], token.address);
-  const crowdsale = await IobCrowdsale.deployed();
+  //Wallet deployment
+  await deployer.deploy(IobWallet, 1, token.address);
+  const wallet = await IobWallet.deployed();
 
-  await token.transfer(crowdsale.address, await token.totalSupply());
+  //Setting ownerShip and transfering total supply to wallet
+  await token.transferOwnership(wallet.address);
+  await token.transfer(wallet.address, await token.totalSupply());
 };
