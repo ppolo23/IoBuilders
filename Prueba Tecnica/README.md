@@ -24,6 +24,8 @@ In order to meet the requirements, I decided to develop some users logic (user c
 
 Apart for those functions, I developed the method `deposit`, wich is in charge of providing the users Ether so that they can perform blockchain operations. As i worked with a local testnet wich creates a number  of accounts with eth, I chose one of them be act as a facuted (as some other testnets do).
 
+In addition, I created a dockerized PostgreSql database for storing user information (see Docker folder).
+
 ### Requests
 
 Those are the requests accepted by the system:
